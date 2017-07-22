@@ -10,7 +10,6 @@
         android:id="@+id/result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:clickable="false"
@@ -19,8 +18,6 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,12 +27,12 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:text="textview"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/newNumber"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button7"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/newNumber" />
+        app:layout_constraintRight_toLeftOf="@+id/button7" />
 
     <EditText
         android:id="@+id/newNumber"
@@ -43,13 +40,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintBaseline_toBaselineOf="@+id/result"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/result" />
+        app:layout_constraintRight_toLeftOf="@+id/result" />
 
     <Button
         android:id="@+id/button0"
