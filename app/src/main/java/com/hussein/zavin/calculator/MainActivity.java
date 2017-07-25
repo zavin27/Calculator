@@ -7,48 +7,73 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private final String STATE_PENDING_OPERATION = "PendingOperation Context";
     private static final String STATE_OPERAND1 = "operand1";
-    private EditText result;
-    private EditText newNumber;
-    private TextView displayOperation;
+    @BindView(R.id.result)
+    EditText result;
+    @BindView(R.id.newNumber)
+    EditText newNumber;
+    @BindView(R.id.operation)
+    TextView operation;
 
-    private Double operand1 = null;
+    @BindView(R.id.button0)
+    Button button0;
+    @BindView(R.id.button1)
+    Button button1;
+    @BindView(R.id.button2)
+    Button button2;
+    @BindView(R.id.button3)
+    Button button3;
+    @BindView(R.id.button4)
+    Button button4;
+    @BindView(R.id.button5)
+    Button button5;
+    @BindView(R.id.button6)
+    Button button6;
+    @BindView(R.id.button7)
+    Button button7;
+    @BindView(R.id.button8)
+    Button button8;
+    @BindView(R.id.button9)
+    Button button9;
+    @BindView(R.id.buttonDot)
+    Button buttonDot;
+    @BindView(R.id.buttonEquals)
+    Button buttonEquals;
+    @BindView(R.id.buttonDivide)
+    Button buttonDivide;
+    @BindView(R.id.buttonMultiply)
+    Button buttonMultiply;
+    @BindView(R.id.buttonMinus)
+    Button buttonMinus;
+    @BindView(R.id.buttonPlus)
+    Button buttonPlus;
+    @BindView(R.id.buttonNegative)
+    Button buttonNegative;
+    @BindView(R.id.buttonClear)
+    Button buttonClear;
+    @BindView(R.id.buttonDel)
+    Button buttonDel;
+
+
+    private Double operand1;
+
     private String pendingOperation = "=";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        result = (EditText) findViewById(R.id.result);
-        newNumber = (EditText) findViewById(R.id.newNumber);
-        displayOperation = (TextView) findViewById(R.id.operation);
-
-
-        Button button0 = (Button) findViewById(R.id.button0);
-        Button button1 = (Button) findViewById(R.id.button1);
-        Button button2 = (Button) findViewById(R.id.button2);
-        Button button3 = (Button) findViewById(R.id.button3);
-        Button button4 = (Button) findViewById(R.id.button4);
-        Button button5 = (Button) findViewById(R.id.button5);
-        Button button6 = (Button) findViewById(R.id.button6);
-        Button button7 = (Button) findViewById(R.id.button7);
-        Button button8 = (Button) findViewById(R.id.button8);
-        Button button9 = (Button) findViewById(R.id.button9);
-        Button buttonDot = (Button) findViewById(R.id.buttonDot);
-
-
-        Button buttonEquals = (Button) findViewById(R.id.buttonEquals);
-        Button buttonDivide = (Button) findViewById(R.id.buttonDivide);
-        Button buttonMultiply = (Button) findViewById(R.id.buttonMultiply);
-        Button buttonMinus = (Button) findViewById(R.id.buttonMinus);
-        Button buttonPlus = (Button) findViewById(R.id.buttonPlus);
-        Button buttonNegative = (Button) findViewById(R.id.buttonNegative);
-        Button buttonClear = (Button) findViewById(R.id.buttonClear);
+        ButterKnife.bind(this);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -79,11 +104,12 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Double doubleValue = Double.valueOf(value);
                     performOperation(doubleValue, op);
+
                 } catch (NumberFormatException e) {
                     newNumber.setText("");
                 }
                 pendingOperation = op;
-                displayOperation.setText(pendingOperation);
+                operation.setText(pendingOperation);
 
             }
         };
@@ -102,9 +128,17 @@ public class MainActivity extends AppCompatActivity {
                     newNumber.setText("-");
                 } else {
                     try {
-                        Double doubleValue = Double.valueOf(value);
-                        doubleValue *= -1;
-                        newNumber.setText(doubleValue.toString());
+                        if (value.indexOf(".") < 0) {
+                            Integer integerValue = Integer.valueOf(value);
+                            integerValue *= -1;
+                            newNumber.setText(integerValue.toString());
+                        } else {
+                            Double doubleValue = Double.valueOf(value);
+                            doubleValue *= -1;
+                            newNumber.setText(doubleValue.toString());
+                        }
+
+
                     } catch (NumberFormatException e) {
                         newNumber.setText("");
                     }
@@ -120,13 +154,23 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 result.setText("");
                 newNumber.setText("");
-                displayOperation.setText("");
+                operation.setText("");
                 operand1 = null;
 
             }
         });
 
 
+    }
+
+    @OnClick(R.id.buttonDel)
+    void backspace(Button buttonDel) {
+        int inputLength = newNumber.length();
+        int startIndex = 0;
+        if (inputLength >= 1) {
+            String modifiedNumber = newNumber.getText().toString().substring(startIndex, inputLength - 1);
+            newNumber.setText(modifiedNumber);
+        }
     }
 
     private void performOperation(Double value, String operation) {
@@ -158,9 +202,17 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-
-        result.setText(operand1.toString());
+        double doubleValue = operand1;
+        int intValue;
+        if ((operand1 % 1) == 0) {
+            intValue = (int) doubleValue;
+            result.setText("" + intValue);
+        } else {
+            result.setText("" + doubleValue);
+        }
         newNumber.setText("");
+
+
     }
 
     @Override
@@ -168,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         pendingOperation = savedInstanceState.getString(STATE_PENDING_OPERATION);
         operand1 = savedInstanceState.getDouble(STATE_OPERAND1);
-        displayOperation.setText(pendingOperation);
+        operation.setText(pendingOperation);
     }
 
 
